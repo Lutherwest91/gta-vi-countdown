@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#120d2b">
+<title>GTA VI — Compte à rebours</title>
+<style>
+  :root { color-scheme: dark; --pink:#ff4fa3; --cyan:#55e7ef; --ink:#100b25; }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; min-height:100vh; display:grid; place-items:center; padding:24px;
+    color:#fff; font-family:Arial, Helvetica, sans-serif; text-align:center;
+    background:
+      radial-gradient(ellipse at 18% 18%, #743a86 0, transparent 34%),
+      radial-gradient(ellipse at 82% 75%, #07556c 0, transparent 38%),
+      linear-gradient(145deg,#100a27,#211039 52%,#071d31);
+    overflow:hidden;
+  }
+  body:before {
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.22;
+    background: repeating-linear-gradient(0deg, transparent 0 3px, #fff 4px, transparent 5px);
+    mask-image:linear-gradient(to bottom,transparent,#000 30%,#000 75%,transparent);
+  }
+  .card {
+    position:relative; width:min(760px,100%); padding:clamp(28px,6vw,58px) 20px;
+    border:1px solid #ffffff35; border-radius:26px;
+    background:linear-gradient(135deg,#17102bdc,#111a31e8);
+    box-shadow:0 24px 90px #0008, 0 0 55px #ff4fa322;
+    backdrop-filter:blur(12px);
+  }
+  .eyebrow { color:var(--cyan); letter-spacing:.32em; font-size:.75rem; font-weight:700; }
+  h1 { margin:14px 0 4px; font-size:clamp(3rem,11vw,6.5rem); line-height:.95; letter-spacing:-.07em;
+       text-shadow:4px 4px 0 #f04b9a, 0 0 32px #ff4fa366; }
+  .subtitle { margin:18px 0 34px; color:#e8d9f1; letter-spacing:.12em; text-transform:uppercase; font-size:.85rem; }
+  .timer { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(8px,2vw,16px); }
+  .unit { padding:20px 6px 16px; border-radius:16px; border:1px solid #ffffff25;
+          background:#ffffff0b; box-shadow:inset 0 0 24px #55e7ef0b; }
+  .num { display:block; font-variant-numeric:tabular-nums; font-size:clamp(2rem,7vw,4.2rem);
+         font-weight:800; line-height:1.1; color:#fff; }
+  .label { display:block; margin-top:9px; color:var(--cyan); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; }
+  .date { margin:28px 0 0; color:#f4c6e0; font-size:.9rem; }
+  .status { min-height:1.4em; margin-top:16px; color:#fff; font-weight:700; }
+  .footer { margin-top:34px; color:#b6a9c8; font-size:.7rem; letter-spacing:.12em; }
+  @media(max-width:430px) { body{padding:14px} .card{padding:34px 12px} .unit{padding:16px 2px 13px} .label{font-size:.58rem;letter-spacing:.08em} }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="eyebrow">LE COMPTE À REBOURS EST LANCÉ</div>
+  <h1>GTA VI</h1>
+  <div class="subtitle">Plus que quelques instants avant Vice City</div>
+  <section class="timer" aria-label="Temps restant avant la sortie de GTA VI">
+    <div class="unit"><span class="num" id="days">—</span><span class="label">Jours</span></div>
+    <div class="unit"><span class="num" id="hours">—</span><span class="label">Heures</span></div>
+    <div class="unit"><span class="num" id="minutes">—</span><span class="label">Minutes</span></div>
+    <div class="unit"><span class="num" id="seconds">—</span><span class="label">Secondes</span></div>
+  </section>
+  <p class="date">SORTIE PRÉVUE : 19 NOVEMBRE 2026</p>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="footer">FAN COUNTDOWN • NON OFFICIAL</div>
+</main>
+<script>
+  // Échéance fixée à minuit, heure de Paris, au début du 19 novembre 2026.
+  const target = new Date('2026-11-19T00:00:00+01:00').getTime();
+  const fields = {
+    days: document.getElementById('days'),
+    hours: document.getElementById('hours'),
+    minutes: document.getElementById('minutes'),
+    seconds: document.getElementById('seconds')
+  };
+  const status = document.getElementById('status');
+  const pad = n => String(n).padStart(2, '0');
+  function update() {
+    let remaining = target - Date.now();
+    if (remaining <= 0) {
+      Object.values(fields).forEach(el => el.textContent = '00');
+      status.textContent = 'C’EST LE JOUR DE LA SORTIE !';
+      return;
+    }
+    const days = Math.floor(remaining / 86400000); remaining %= 86400000;
+    const hours = Math.floor(remaining / 3600000); remaining %= 3600000;
+    const minutes = Math.floor(remaining / 60000); remaining %= 60000;
+    const seconds = Math.floor(remaining / 1000);
+    fields.days.textContent = days;
+    fields.hours.textContent = pad(hours);
+    fields.minutes.textContent = pad(minutes);
+    fields.seconds.textContent = pad(seconds);
+    status.textContent = 'Chaque seconde nous rapproche de GTA VI.';
+  }
+  update();
+  setInterval(update, 1000);
+</script>
+</body>
+</html>
